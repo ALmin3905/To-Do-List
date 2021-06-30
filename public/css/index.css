@@ -1,0 +1,41 @@
+html{
+    background-color: rgb(243, 243, 197);
+}
+
+h1{
+    font-size: 60px;
+    text-align: center;
+}
+
+.manu{
+    background-color: rgb(169, 219, 248);
+    font-size: 30px;
+    height: 60px;
+}
+
+.manu ul{
+    position: relative;
+    top: 20%;
+
+    margin-top: 10px;
+}
+
+.manu ul li{
+    display: inline-flex;
+    width: 200px;
+}
+
+.manu ul li a:link{
+    text-decoration: none;
+    color: black;
+}
+
+.manu ul li a:visited{
+    text-decoration: none;
+    color: black;
+}
+
+.manu ul li a:hover{
+    color: rgb(169, 219, 248);
+    background-color: white;
+}
