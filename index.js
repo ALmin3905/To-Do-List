@@ -6,7 +6,7 @@ let app = express()
 
 app.engine('html', require('express-art-template'))
 
-let port = process.env.port || 3000
+let port = process.env.PORT || 5000
 app.listen(port, () => {
     console.log('App is listening.')
 })
