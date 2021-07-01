@@ -7,4 +7,4 @@
   <li>熟悉sql的語法且運用Mysql來實作查詢、新增、刪除、修改等操作。</li>
 
 <h2>Demo</h2>
-  <li><a href="https://todolist3905.herokuapp.com">To-Do List</a></li>
+  <li><a href="https://todolist3905.herokuapp.com">To-Do List</a> (開啟可能要一段時間)</li>
