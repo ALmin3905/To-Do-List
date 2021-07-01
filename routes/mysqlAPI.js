@@ -2,6 +2,13 @@ let express = require('express')
 let mysql = require('mysql2')
 let mysqlAPI = express.Router()
 
+//由於req中不會含有json檔，所以註解掉了
+//app.use(express.json())
+
+//使用中間件將HTML form表單提交的數據取出
+app.use(express.urlencoded({extended: false}))
+
+//雲端資料庫不能一直保持連線，所以改用pool，需要使用時才連線。
 let pool = mysql.createPool({
     host    :'us-cdbr-east-04.cleardb.com',
     user    :'b375edcfa4c258',
@@ -9,8 +16,7 @@ let pool = mysql.createPool({
     database:'heroku_b5ee5fdd85d064a'
 })
 
-let schemas = 'heroku_b5ee5fdd85d064a'
-
+//To-Do List的首頁，並且從資料庫查詢list，然後放入HTML
 mysqlAPI.get('/', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) {
@@ -28,11 +34,12 @@ mysqlAPI.get('/', (req, res) => {
                     res.render('todolist.html', {data:rows})
                 }
             })
+            connection.release()
         }
-        connection.release()
     })
 })
 
+//新增內容進資料庫
 mysqlAPI.post('/post', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) {
@@ -50,11 +57,12 @@ mysqlAPI.post('/post', (req, res) => {
                     res.redirect('.')
                 }
             })
+            connection.release()
         }
-        connection.release()
     })
 })
 
+//刪除內容，以id當作要刪除的依據
 mysqlAPI.post('/delete/:id', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) {
@@ -72,11 +80,12 @@ mysqlAPI.post('/delete/:id', (req, res) => {
                     res.redirect('..')
                 }
             })
+            connection.release()
         }
-        connection.release()
     })
 })
 
+//修改內容
 mysqlAPI.post('/modify/:id', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) {
@@ -94,8 +103,8 @@ mysqlAPI.post('/modify/:id', (req, res) => {
                     res.redirect('..')
                 }
             })
+            connection.release()
         }
-        connection.release()
     })
 })
 
