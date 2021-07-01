@@ -56,17 +56,47 @@ mysqlAPI.post('/post', (req, res) => {
 })
 
 mysqlAPI.post('/delete/:id', (req, res) => {
-    connection.query(`delete from  ${schemas}.todo where id = ?`, req.params.id, (err) => {
-        if(err) throw err
+    pool.getConnection((err, connection) => {
+        if(err) {
+            console.log("連線失敗!!")
+            console.log("錯誤資訊:" + err)
+        }
+        else
+        {
+            connection.query('delete from todo where id = ?', req.params.id, (err) => {
+                if(err) {
+                    console.log("刪除失敗!!")
+                    console.log("錯誤資訊:" + err)
+                }
+                else {
+                    res.redirect('..')
+                }
+            })
+        }
+        connection.release()
     })
-    res.redirect('..')
 })
 
 mysqlAPI.post('/modify/:id', (req, res) => {
-    connection.query(`update  ${schemas}.todo set msg = ? where id = ?`, [req.body.value, req.params.id], (err) => {
-        if(err) throw err
+    pool.getConnection((err, connection) => {
+        if(err) {
+            console.log("連線失敗!!")
+            console.log("錯誤資訊:" + err)
+        }
+        else
+        {
+            connection.query('update todo set msg = ? where id = ?', [req.body.value, req.params.id], (err) => {
+                if(err) {
+                    console.log("更新失敗!!")
+                    console.log("錯誤資訊:" + err)
+                }
+                else {
+                    res.redirect('..')
+                }
+            })
+        }
+        connection.release()
     })
-    res.redirect('..')
 })
 
 module.exports = mysqlAPI
