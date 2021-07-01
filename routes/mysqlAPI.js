@@ -14,14 +14,14 @@ let schemas = 'heroku_b5ee5fdd85d064a'
 mysqlAPI.get('/', (req, res) => {
     pool.getConnection((err, connection) => {
         if(err) {
-            console.log("連線失敗")
+            console.log("連線失敗!!")
             console.log("錯誤資訊:" + err)
         }
         else
         {
-            connection.query(`select id, msg from todo`, (err, rows) => {
+            connection.query('select id, msg from todo', (err, rows) => {
                 if(err) {
-                    console.log("查詢失敗")
+                    console.log("查詢失敗!!")
                     console.log("錯誤資訊:" + err)
                 }
                 else {
@@ -34,10 +34,25 @@ mysqlAPI.get('/', (req, res) => {
 })
 
 mysqlAPI.post('/post', (req, res) => {
-    connection.query(`insert into  ${schemas}.todo (msg) values (?)`, req.body.text, (err) => {
-        if(err) throw err
+    pool.getConnection((err, connection) => {
+        if(err) {
+            console.log("連線失敗!!")
+            console.log("錯誤資訊:" + err)
+        }
+        else
+        {
+            connection.query('insert into todo (msg) values (?)', req.body.text, (err) => {
+                if(err) {
+                    console.log("新增失敗!!")
+                    console.log("錯誤資訊:" + err)
+                }
+                else {
+                    res.redirect('.')
+                }
+            })
+        }
+        connection.release()
     })
-    res.redirect('.')
 })
 
 mysqlAPI.post('/delete/:id', (req, res) => {
