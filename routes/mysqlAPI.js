@@ -3,10 +3,10 @@ let mysql = require('mysql2')
 let mysqlAPI = express.Router()
 
 //由於req中不會含有json檔，所以註解掉了
-//app.use(express.json())
+//mysqlAPI.use(express.json())
 
 //使用中間件將HTML form表單提交的數據取出
-app.use(express.urlencoded({extended: false}))
+mysqlAPI.use(express.urlencoded({extended: false}))
 
 //雲端資料庫不能一直保持連線，所以改用pool，需要使用時才連線。
 let pool = mysql.createPool({
