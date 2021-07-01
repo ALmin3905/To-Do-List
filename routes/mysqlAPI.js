@@ -17,7 +17,7 @@ connection.connect((err) =>{
 
 mysqlAPI.get('/', (req, res) => {
     connection.query(`select id, msg from ${schemas}.todo`, schemas, (err, rows) => {
-        if(err) throw err
+        if(err) console.log(err)
         else res.render('todolist.html', {
             data:rows
         })
