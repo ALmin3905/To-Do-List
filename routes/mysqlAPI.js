@@ -6,6 +6,7 @@ let pool = mysql.createPool({
     host    :'us-cdbr-east-04.cleardb.com',
     user    :'b375edcfa4c258',
     password:'1f384a41',
+    database:'heroku_b5ee5fdd85d064a'
 })
 
 let schemas = 'heroku_b5ee5fdd85d064a'
@@ -18,7 +19,7 @@ mysqlAPI.get('/', (req, res) => {
         }
         else
         {
-            connection.query(`select id, msg from ${schemas}.todo`, (err, rows) => {
+            connection.query(`select id, msg from todo`, (err, rows) => {
                 if(err) {
                     console.log("查詢失敗")
                     console.log("錯誤資訊:" + err)
