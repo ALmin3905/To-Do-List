@@ -1,58 +1,78 @@
 let express = require('express')
 let mysql = require('mysql2')
 let mysqlAPI = express.Router()
+require('./session')(mysqlAPI)
 
-//由於req中不會含有json檔，所以註解掉了
-//mysqlAPI.use(express.json())
+mysqlAPI.use(express.urlencoded({extended: false})) //使用中間件將HTML form表單提交的數據取出
 
-//使用中間件將HTML form表單提交的數據取出
-mysqlAPI.use(express.urlencoded({extended: false}))
-
-//設定連線mysql資料庫的資訊
-let connection = mysql.createConnection({
-    host    :'localhost',
-    user    :'root',
-    password:'root'
+let pool = mysql.createPool({
+    host        :'localhost',
+    user        :'root',
+    password    :'root',
+    database    :'todolist'
 })
 
 //連上mysql資料庫
-connection.connect((err) =>{
-    if(err) throw err
+pool.getConnection((err) =>{
+    if(err) console.log(err)
     else console.log('Connecting Mysql successfully.')
 })
 
 //To-Do List的首頁，並且從資料庫查詢list，然後放入HTML
 mysqlAPI.get('/', (req, res) => {
-    connection.query(`select id, msg from todolist.todo`, (err, rows) => {
-        if(err) throw err
-        else res.render('todolist.html', {
-            data:rows
+    try {
+        pool.getConnection((err, connection) => {
+            connection.query(`SELECT id, msg FROM todo WHERE uid = ?`, req.session.uid || 0, (err, rows) => {
+                res.render('todolist.html', { data: rows })
+            })
+            connection.release()
         })
-    })
+    }
+    catch(err) {
+        console.log(err)
+    }
 })
 
 //新增內容進資料庫
 mysqlAPI.post('/post', (req, res) => {
-    connection.query('insert into todolist.todo (msg) values (?)', req.body.text, (err) => {
-        if(err) throw err
-    })
-    res.redirect('.')
+    try {
+        pool.getConnection((err, connection) => {
+            connection.query('INSERT INTO todo (uid, msg) VALUES (?, ?)', [req.session.uid, req.body.text], (err) => {})
+            connection.release()
+        })
+        res.redirect('.')
+    }
+    catch(err) {
+        console.log(err)
+    }
 })
 
 //刪除內容，以id當作要刪除的依據
 mysqlAPI.post('/delete/:id', (req, res) => {
-    connection.query('delete from todolist.todo where id = ?', req.params.id, (err) => {
-        if(err) throw err
-    })
-    res.redirect('..')
+    try {
+        pool.getConnection((err, connection) => {
+            connection.query('DELETE FROM todo WHERE id = ?', req.params.id, (err) => {})
+            connection.release()
+        })
+        res.redirect('..')
+    }
+    catch(err) {
+        console.log(err)
+    }
 })
 
 //修改內容
 mysqlAPI.post('/modify/:id', (req, res) => {
-    connection.query('update todolist.todo set msg = ? where id = ?', [req.body.value, req.params.id], (err) => {
-        if(err) throw err
-    })
-    res.redirect('..')
+    try {
+        pool.getConnection((err, connection) => {
+            connection.query('UPDATE todo SET msg = ? WHERE id = ?', [req.body.value, req.params.id], (err) => {})
+            connection.release()
+        })
+        res.redirect('..')
+    }
+    catch(err) {
+        console.log(err)
+    }
 })
 
 module.exports = mysqlAPI

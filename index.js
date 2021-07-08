@@ -1,5 +1,6 @@
 let express = require('express')
 let mysqlAPI = require('./routes/mysqlAPI')
+let loginAPI = require('./routes/loginAPI')
 
 let app = express()
 
@@ -16,6 +17,8 @@ app.use(express.static(__dirname + '/public'))
 
 //使用router
 app.use('/todolist', mysqlAPI)
+
+app.use('/user', loginAPI)
 
 //首頁
 app.get('/', (req, res) => {
