@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link href="/css/index.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="manu">
+        <ul>
+            <li><a href="/">首頁</a></li>
+            <li><a href="/todolist">To-Do List</a></li>
+            <li><a href="/user">登入/登出</a></li>
+        </ul>
+    </div>
+    <h1><strong>User</strong></h1>
+    <hr>
+    <form action="/user/login" method="POST">
+        帳號：<input required name="user_name" type="text" maxlength="10" size="16"><br>
+        密碼：<input required name="user_password" type="text" maxlength="10" size="16"><br>
+        <input type="submit" value="登入">  {{errInfo}}</input>
+    </form>
+    <p>還沒註冊嗎?請按這<a href="/User/signup">註冊</a>。</p>
+    <p>或是使用預設帳號 (帳號:admin ; 密碼:admin)</p>
+</body>
+</html>

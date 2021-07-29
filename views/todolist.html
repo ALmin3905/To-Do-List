@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link href="/css/index.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="manu">
+        <ul>
+            <li><a href="/">首頁</a></li>
+            <li><a href="/todolist">To-Do List</a></li>
+            <li><a href="/user">登入/登出</a></li>
+        </ul>
+    </div>
+    <h1><strong>To-Do List</strong></h1>
+    <hr>
+    <form action="/todolist/post" method="POST">
+        請輸入代辦事項：<input required name="text" type="text" maxlength="10" size="16">
+        <button type="submit"><img src="/images/plus.png" width="15" height="15"/></button>
+        (最長10個字)
+    </form>
+    <br>
+    <form action="/" method="POST">
+        {{each data}}
+            <button type="submit" value="/todolist/delete/{{$value.id}}" onclick="putVarToAction(this)"><img src="/images/delete.png" width="15" height="15"/></button>
+            <button type="button" onclick="modifyValue(1, {{$value.id}})"><img src="/images/pen.png" width="15" height="15"/></button>
+            <input  type="text"   id="value_{{$value.id}}" name="value" value={{$value.msg}} maxlength="10" size="16" style="font-size:16px;" required disabled>
+            <button type="submit" id="v_{{$value.id}}" value="/todolist/modify/{{$value.id}}" onclick="putVarToAction(this)" hidden><img src="/images/v.png" width="15" height="15"/></button>
+            <button type="button" id="x_{{$value.id}}" value="" onclick="modifyValue(0, {{$value.id}})" hidden><img src="/images/x.png" width="15" height="15"/></button>
+            <hr align="left" width="235">
+        {{/each}}
+    </form>
+
+    <script>
+        let prevID
+
+        function putVarToAction(obj){
+            obj.form.action = obj.value
+        }
+
+        function modifyValue(b, id){
+            if(b == 1){
+                if(prevID){
+                    modifyValue(0, prevID)
+                }
+                prevID = id
+                document.getElementById("x_" + id).value = document.getElementById("value_" + id).value
+                document.getElementById("value_" + id).disabled = false
+                document.getElementById("v_" + id).hidden = false
+                document.getElementById("x_" + id).hidden = false
+            }
+            else{
+                document.getElementById("value_" + id).value = document.getElementById("x_" + id).value
+                document.getElementById("value_" + id).disabled = true
+                document.getElementById("v_" + id).hidden = true
+                document.getElementById("x_" + id).hidden = true
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Web</title>
+    <link href="/css/index.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="manu">
+        <ul>
+            <li><a href="/">首頁</a></li>
+            <li><a href="/todolist">To-Do List</a></li>
+            <li><a href="/user">登入/登出</a></li>
+        </ul>
+    </div>
+    <h1>查無此頁</h1>
+    <hr>
+    <p align="center" style="font-size: 20px;">請回<a href="/">首頁</a>，否則3秒後將自跳轉跳。</p> 
+</body>
+
+<script>
+    function back2home(){
+        setTimeout(() => {
+            document.location.href = '/'
+        }, 3000);
+    }
+
+    back2home()
+</script>
+
+</html>
