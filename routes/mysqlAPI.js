@@ -2,14 +2,15 @@ let express = require('express')
 let mysql = require('mysql2')
 let mysqlAPI = express.Router()
 require('./session')(mysqlAPI)
+require('dotenv').config()
 
 mysqlAPI.use(express.urlencoded({extended: false})) //使用中間件將HTML form表單提交的數據取出
 
 let pool = mysql.createPool({
-    host        :'localhost',
-    user        :'root',
-    password    :'root',
-    database    :'todolist'
+    host        : process.env.Mysql_host,
+    user        : process.env.Mysql_user,
+    password    : process.env.Mysql_password,
+    database    : 'todolist'
 })
 
 //連上mysql資料庫
@@ -23,7 +24,7 @@ mysqlAPI.get('/', (req, res) => {
     try {
         pool.getConnection((err, connection) => {
             connection.query(`SELECT id, msg FROM todo WHERE uid = ?`, req.session.uid || 0, (err, rows) => {
-                res.render('todolist.html', { data: rows })
+                res.render('todolist.html', { data: rows, name: req.session.user_name })
             })
             connection.release()
         })
@@ -37,7 +38,7 @@ mysqlAPI.get('/', (req, res) => {
 mysqlAPI.post('/post', (req, res) => {
     try {
         pool.getConnection((err, connection) => {
-            connection.query('INSERT INTO todo (uid, msg) VALUES (?, ?)', [req.session.uid, req.body.text], (err) => {})
+            connection.query('INSERT INTO todo (uid, msg) VALUES (?, ?)', [req.session.uid || 0, req.body.text], (err) => {})
             connection.release()
         })
         res.redirect('.')

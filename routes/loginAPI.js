@@ -1,17 +1,16 @@
 let express = require('express')
-let bcrypt = require('bcrypt')              // hash function
+let bcrypt = require('bcrypt')                       // hash function
 let loginAPI = express.Router()
 require('./session')(loginAPI)
 
 loginAPI.use(express.urlencoded({extended: false})) //中間件，撈取表單POST內容
 
-let mysql = require('mysql2')
-// 建立mysql資料庫的連線池
+let mysql = require('mysql2')                       // 建立mysql資料庫的連線池
 let pool = mysql.createPool({
-    host    :'localhost',
-    user    :'root',
-    password:'root',
-    database:'nodejs_user'
+    host        : process.env.Mysql_host,
+    user        : process.env.Mysql_user,
+    password    : process.env.Mysql_password,
+    database    : 'nodejs_user'
 })
 
 // 首頁，如果保持登入狀態就進留言板，若無就進登入頁面

@@ -1,6 +1,7 @@
 let express = require('express')
 let mysqlAPI = require('./routes/mysqlAPI')
 let loginAPI = require('./routes/loginAPI')
+require('dotenv').config()
 
 let app = express()
 
@@ -8,8 +9,8 @@ let app = express()
 app.engine('html', require('express-art-template'))
 
 //開始監聽3000 port
-app.listen(3000, () => {
-    console.log('App is listening at localhost:3000.')
+app.listen(process.env.Port, () => {
+    console.log(`App is listening at localhost:${process.env.Port}.`)
 })
 
 //將public資料夾內的檔案變成靜態檔案
